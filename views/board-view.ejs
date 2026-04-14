@@ -1,0 +1,115 @@
+<%- include('partials/header', { pageTitle, currentUserId }) %>
+
+<% if (!board) { %>
+  <section class="panel">
+    <h1>Board Not Found</h1>
+    <p class="page-note"><%= error %></p>
+    <a href="/dashboard" class="button-link">Back to Dashboard</a>
+  </section>
+<% } else { %>
+  <section class="page-head">
+    <div>
+      <a href="/dashboard" class="back-link">Back to Dashboard</a>
+      <h1><%= board.title %></h1>
+      <p class="page-note">Manage personal tasks and group project cards in simple server-rendered lists.</p>
+    </div>
+  </section>
+
+  <% if (error) { %>
+    <div class="message error"><%= error %></div>
+  <% } %>
+
+  <section class="panel">
+    <h2>Add New List</h2>
+    <form action="#" method="GET" class="inline-form">
+      <input type="text" name="title" placeholder="List title" required />
+      <button type="submit">Add List</button>
+    </form>
+  </section>
+
+  <section class="list-row">
+    <% lists.forEach((list) => { %>
+      <article class="list-column">
+        <div class="list-header">
+          <h2><%= list.title %></h2>
+        </div>
+
+        <section class="panel form-panel">
+          <h3>Create Work Item</h3>
+          <form action="#" method="GET" class="stack-form">
+            <label>
+              Work Type
+              <select name="type" class="task-type-select" data-target="type-fields-<%= list._id %>">
+                <option value="personal">Personal Task</option>
+                <option value="group">Group Project</option>
+              </select>
+            </label>
+
+            <label>
+              Title
+              <input type="text" name="title" required />
+            </label>
+
+            <label>
+              Description
+              <textarea name="description" rows="2" placeholder="Optional description"></textarea>
+            </label>
+
+            <label>
+              Due Date
+              <input type="date" name="dueDate" />
+            </label>
+
+            <div id="type-fields-<%= list._id %>" class="group-fields hidden">
+              <label>
+                Group Name
+                <input type="text" name="groupName" placeholder="Example: Viva Team" />
+              </label>
+
+              <label>
+                Members
+                <input type="text" name="members" placeholder="Asha, Ravi, Meera" />
+              </label>
+
+              <label>
+                Subtasks
+                <textarea name="subtasksText" rows="4" placeholder="Write one subtask per line"></textarea>
+              </label>
+            </div>
+
+            <button type="submit">Add Item</button>
+          </form>
+        </section>
+
+        <div class="card-stack">
+          <% if (!list.cards.length) { %>
+            <article class="card empty-card">
+              <p class="page-note">No items in this list yet.</p>
+            </article>
+          <% } %>
+        </div>
+      </article>
+    <% }) %>
+  </section>
+
+  <script>
+    const typeSelectors = document.querySelectorAll('.task-type-select');
+
+    typeSelectors.forEach((selector) => {
+      const target = document.getElementById(selector.dataset.target);
+
+      const toggleFields = () => {
+        if (!target) {
+          return;
+        }
+
+        target.classList.toggle('hidden', selector.value !== 'group');
+      };
+
+      selector.addEventListener('change', toggleFields);
+      toggleFields();
+    });
+  </script>
+<% } %>
+
+<%- include('partials/footer') %>

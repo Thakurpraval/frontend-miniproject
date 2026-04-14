@@ -1,0 +1,40 @@
+<%- include('partials/header', { pageTitle, currentUserId }) %>
+
+<section class="page-head">
+  <div>
+    <h1>Your Boards</h1>
+    <p class="page-note">Create a board and start tracking personal tasks or group project cards.</p>
+  </div>
+</section>
+
+<% if (error) { %>
+  <div class="message error"><%= error %></div>
+<% } %>
+
+<section class="panel">
+  <h2>Create New Board</h2>
+  <form action="/board" method="GET" class="inline-form">
+    <input type="text" name="title" placeholder="Board title" required />
+    <button type="submit">Create Board</button>
+  </form>
+</section>
+
+<section class="board-grid">
+  <% if (!boards.length) { %>
+    <article class="panel">
+      <h3>No boards yet</h3>
+      <p class="page-note">Create your first board to begin.</p>
+    </article>
+  <% } %>
+
+  <% boards.forEach((board) => { %>
+    <article class="panel">
+      <h3><%= board.title %></h3>
+      <div class="panel-actions">
+        <a href="/board" class="button-link">Open Board</a>
+      </div>
+    </article>
+  <% }) %>
+</section>
+
+<%- include('partials/footer') %>

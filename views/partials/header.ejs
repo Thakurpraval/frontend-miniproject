@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %> | Plain Kanban</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <% const isLoggedIn = typeof currentUserId !== 'undefined' && currentUserId; %>
+    <header class="site-header">
+      <div class="container nav-row">
+        <a href="<%= isLoggedIn ? '/dashboard' : '/login' %>" class="brand">Plain Kanban</a>
+        <nav class="nav-links">
+          <% if (isLoggedIn) { %>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/board">Board</a>
+          <% } else { %>
+            <a href="/login">Login</a>
+            <a href="/signup">Sign Up</a>
+          <% } %>
+        </nav>
+      </div>
+    </header>
+    <main class="container page-content">
